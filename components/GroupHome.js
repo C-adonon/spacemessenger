@@ -1,17 +1,4 @@
 import GroupChat from "./GroupChat.js";
-import { firebaseApp } from "../firebase.js";
-import {
-  getFirestore,
-  collection,
-  onSnapshot,
-  doc,
-  setDoc,
-  addDoc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js";
 
 export default {
   components: {
@@ -32,13 +19,6 @@ export default {
   methods: {
     async onSubmit() {
       this.submitted = true;
-      console.log(this.submitted + " " + this.userName + " " + this.groupId);
-
-      const db = getFirestore(firebaseApp);
-      const groupsRef = collection(db, "groups", String(this.groupId), "users");
-      const newEntry = await setDoc(doc(groupsRef), {
-        name: this.userName,
-      });
     },
   },
 
