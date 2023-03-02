@@ -22,6 +22,7 @@ export default {
     return {
       groupId: null,
       groupIsCreated: false,
+      url: null,
     };
   },
 
@@ -40,8 +41,15 @@ export default {
       const docRef = await addDoc(collection(db, "groups"), {});
       //   Sets the groupId to the id of the group
       this.groupId = docRef.id;
-      //   Changes the url to the groupId
-      window.location.href = `http://localhost:5500/index.html?groupId=${this.groupId}`;
+      this.setUrl();
+    },
+
+    // Sets the new url for the group
+    setUrl() {
+      // Gets the current url
+      this.url = window.location.href;
+      // Changes the url and adds the groupId
+      window.location.href = `${this.url}index.html?groupId=${this.groupId}`;
     },
   },
 
