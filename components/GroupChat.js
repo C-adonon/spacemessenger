@@ -33,6 +33,9 @@ export default {
       collection(db, "groups", this.groupId, "messages"),
       this.getMessages
     );
+    this.getUrl();
+    const chatMessages = document.querySelector(".chat-messages");
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   },
 
   methods: {
@@ -45,6 +48,10 @@ export default {
         message: this.message,
         createdAt: new Date(),
       });
+      this.message = null;
+
+      const chatMessages = document.querySelector(".chat-messages");
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     },
 
     // Gets the messages from the database
@@ -58,31 +65,35 @@ export default {
       messagesSnapshot.forEach((doc) => {
         this.groupMessages.push(doc.data());
       });
-      console.log(this.groupMessages);
-      console.log(window.location);
+      const chatMessages = document.querySelector(".chat-messages");
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     },
 
     // Gets url
     getUrl() {
-      url = window.location.href;
+      this.url = window.location.href;
     },
   },
 
   template: `
     <section class="group-chat">
-        <h2>Share the link: {{this.url}}</h2>
-        <div class="chat-messages">
-            <ul v-for="message in groupMessages" :key="message.id">
-              // <li class="left-message">
+        <h3>Share the link: {{this.url}}</h3>
+        
+            <ul class="chat-messages">
 
-              // </li>
-              // <li class="right-message">
-              
-              // </li>
-            
-                <p>{{message.name}}: {{message.message}}</p>
+              <li v-for="message in groupMessages" :key="message.id">
+                <div v-if="message.name == this.userName" class="current-user-message">
+                  <p class="user-name">{{message.name}}</p> 
+                  <p class="message">{{message.message}}</p>  
+                </div>
+                <div v-else class="other-user-message">
+                  <p class="user-name">{{message.name}}</p>
+                  <p class="message">{{message.message}}</p>
+                </div>
+              </li>
+
             </ul> 
-        </div>
+      
         <form class="chat-form" @submit.prevent="onSubmit">
             <input class="input" type="text" placeholder="Your message" v-model="message" required />
             <input class="button" type="submit" value="Send" />
